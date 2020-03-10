@@ -2,8 +2,8 @@
   <div class="TodoList_Wrapper">
     <ul class="TodoList_ListBox">
       <li class="TodoList_List" v-for="(item,index) in todoItems" v-bind:key="item.item">
-        <i class="TodoList_CheckBtn fas fa-check" @click="checkItem(item,index)" v-bind:class="{TodoList_CheckBtnCom: item.completed}"></i>
-        <span v-bind:class="{TodoList_TextCom: item.completed}">{{item.item}}</span>
+        <i class="TodoList_CheckBtn fas fa-check" @click="checkItem({item:item.item,index:index})" v-bind:class="{TodoList_CheckBtnCom: item.completed}"></i>
+        <span v-bind:class="{TodoList_TextCom: item.completed}">{{item.title}}</span>
         <span class="TodoList_RemoveBtnBox" @click="removeItem(item,index)">
           <i class="TodoList_RemoveBtn fas fa-minus fa-2x"></i>
         </span>
@@ -13,34 +13,49 @@
 </template>
 
 <script>
+import Constant from '../../../constant'
+import {fetchTodoList} from '../../../api/index'
 export default {
   name:'TodoList',
   data() {
     return {
-      todoItems: []
+      todoItems:[]
     }
   },
-  created() {
-    if(localStorage.length > 0) {
-      for (let i=0;i<localStorage.length;i++) {
-        if(localStorage.key(i) !== 'loglevel:webpack-dev-server')
-        // localStorage.getItem(localStorage.ket(i));
-        // console.log(JSON.parse(localStorage.getItem(localStorage.key(i))));
-        this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))))
-      }
-    }
-  },
+  // computed: {
+  //   todoItems () {
+  //     return this.$store.state.todoItems;
+  //   }
+  // },
   methods: {
-    removeItem(item,index) {
-      localStorage.removeItem(item);
-      this.todoItems.splice(index,1);
+    checked (item) {
+      return item ? { TodoList_CheckBtnCom: true } : { TodoList_CheckBtnCom: false };
     },
-     /* eslint-disable no-unused-vars */
-    checkItem(item,index) {
-      item.completed = !item.completed;
-      localStorage.removeItem(item.item);
-      localStorage.setItem(item.item,JSON.stringify(item));
+    removeItem(item) {
+      this.$store.commit(Constant.REMOVE_TODO, {
+        item: item.todo,
+        index: item.index 
+      });
+    },
+    checkItem(item) {
+        this.$store.commit(Constant.CHECK_TODO, {
+        item: item.todo,
+        index: item.index 
+      });
     }
+  },
+  created () {
+    // this.$store.commit(Constant.SHOW_TODOITEMS);
+   fetchTodoList()
+    .then(res => { 
+      console.log(res)
+      this.todoItems = res.data;
+    })
+    /* eslint-disable no-undef */
+    .catch(e=> {
+      console.log(e)
+   });
+
   }
 }
 </script>

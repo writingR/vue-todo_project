@@ -27,7 +27,7 @@ export default {
 }
 .TodoScreen_Wrapper {
   width: 800px;
-  height: 1200px;
+  /* height: 1200px; */
   margin: 80px 0;
   background-color: #f5f6fa;
   border-radius: 10px;

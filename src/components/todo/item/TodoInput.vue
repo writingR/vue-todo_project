@@ -1,6 +1,6 @@
 <template>
   <div class="TodoInput_Wrapper shadow">
-    <input class="TodoInput_Input" type="text" v-model="todoItem" @keypress.enter="addItems">
+    <input class="TodoInput_Input" type="text" v-model="item" @keypress.enter="addItems">
     <span class="TodoInput_BtnWrapper">
       <i class="TodoInput_AddBtn fas fa-plus" aria-hidden="true" @click="addItems"></i>
     </span>
@@ -8,26 +8,19 @@
 </template>
 
 <script>
+import Constant from '@/constant'
 export default {
   name:'TodoInput',
   data() {
     return {
-      todoItem:''
+      item:''
     }
   },
   methods: {
     addItems() {
-      if(this.todoItem !== ''){
-        let obj = {completed:false, item: this.todoItem};
-        localStorage.setItem(this.todoItem, JSON.stringify(obj));
-        // initialize
-        this.todoItem = '';
-        location.reload();
-      } else {
-        alert('값을 입력해주세요');
-      }
-      
-    }
+      this.$store.commit(Constant.ADD_TODO, { item: this.item });
+      this.item = '';
+    },
   }
 }
 </script>
