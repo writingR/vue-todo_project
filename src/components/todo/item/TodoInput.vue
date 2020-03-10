@@ -8,7 +8,8 @@
 </template>
 
 <script>
-import Constant from '@/constant'
+// import Constant from '@/constant'
+import {addTodo} from '../../../api/index'
 export default {
   name:'TodoInput',
   data() {
@@ -18,8 +19,15 @@ export default {
   },
   methods: {
     addItems() {
-      this.$store.commit(Constant.ADD_TODO, { item: this.item });
-      this.item = '';
+      // this.$store.commit(Constant.ADD_TODO, { item: this.item });
+      // this.item = '';
+      addTodo()
+        .then(res=> {
+          console.log(res);
+        })
+        .catch(e=> {
+          console.log(e,'error');
+        });
     },
   }
 }

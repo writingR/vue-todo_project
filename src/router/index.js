@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import TodoApp from '../components/todo/TodoApp.vue'
 
 Vue.use(VueRouter)
 
 const routes = [{
-    path: '/',
-    name: 'Home',
-    // component: Home
+    path: '/todo',
+    name: 'todoApp',
+    component: TodoApp
   },
 ]
 
